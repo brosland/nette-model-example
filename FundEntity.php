@@ -314,7 +314,7 @@ class FundEntity
 	 */
 	public function addFunds(AccountEntity $investorAccount, $amount)
 	{
-		if ($this->state == self::STATE_OPEN)
+		if ($this->state != self::STATE_OPEN)
 		{
 			throw new \RuntimeException('Cannot add funds. The fund is not open yet.');
 		}
@@ -344,7 +344,7 @@ class FundEntity
 	 */
 	public function removeFunds(AccountEntity $investorAccount, $amount)
 	{
-		if ($this->state == self::STATE_OPEN)
+		if ($this->state != self::STATE_OPEN)
 		{
 			throw new \RuntimeException('Cannot remove funds. The fund is not open yet.');
 		}
