@@ -11,7 +11,7 @@ FundEntity
 		- investori môžu vkladať alebo vyberať svoje investície (addFunds, removeFunds)
 	- CLOSED:
 		- fond je uzatvorený určitý čas, investori nemôžu meniť svoje investície
-		- správca fondu môže priebežbe vytvárať splátky, ktoré sa prelozdeľujú medzi investorov (payPayment)
+		- správca fondu môže priebežbe vytvárať splátky, ktoré sa prelozdeľujú medzi investorov (addPayment)
 	- FINISHED:
 		- fond je definitívne ukončený a nie je možné manipulovať ani s investíciami ani vytvárať splátky
 	- CANCELLED:
