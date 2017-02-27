@@ -13,15 +13,13 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
-use Nette\InvalidArgumentException;
-use Nette\InvalidStateException;
 
 /**
  * @ORM\Entity
  * @ORM\Table(
  * 		name="funds_fund",
  * 		uniqueConstraints={
- * 			@ORM\UniqueConstraint(name="unique_title",columns={"title"})
+ * 			@ORM\UniqueConstraint(name="unique_funds_fund_title",columns={"title"})
  *      })
  * )
  */
@@ -325,7 +323,7 @@ class FundEntity
 
 		if (bccomp($this->targetAmount, $futureInvested) == -1)
 		{
-			throw new InvalidArgumentException('Target amount exceeded.');
+			throw new \RuntimeException('Target amount exceeded.');
 		}
 
 		$this->investedAmount = $futureInvested;
@@ -342,8 +340,7 @@ class FundEntity
 	 * @param AccountEntity $investorAccount
 	 * @param string $amount
 	 * @return InvestmentEntity
-	 * @throws InvalidStateException
-	 * @throws InvalidArgumentException
+	 * @throws \RuntimeException
 	 */
 	public function removeFunds(AccountEntity $investorAccount, $amount)
 	{
@@ -356,7 +353,7 @@ class FundEntity
 
 		if (!$investor)
 		{
-			throw new InvalidArgumentException('Invalid investor.');
+			throw new \RuntimeException('Invalid investor.');
 		}
 
 		$investment = $investor->addInvestment(bcmul($amount, '-1')); // -$amount
@@ -379,6 +376,7 @@ class FundEntity
 			throw new \RuntimeException('Cannot close empty fund.');
 		}
 
+		$this->state = self::STATE_CLOSED;
 		$this->closedAt = new DateTime();
 
 		$this->depositTransfer = new TransferEntity(
@@ -399,6 +397,7 @@ class FundEntity
 			throw new \RuntimeException('Invalid fund state. The fund cannot be finished.');
 		}
 
+		$this->state = self::STATE_FINISHED;
 		$this->finishedAt = new DateTime();
 	}
 
@@ -412,6 +411,7 @@ class FundEntity
 			throw new \RuntimeException('Invalid fund state. The fund cannot be cancelled.');
 		}
 
+		$this->state = self::STATE_CANCELLED;
 		$this->cancelledAt = new DateTime();
 
 		foreach ($this->getInvestors(TRUE) as $investor)

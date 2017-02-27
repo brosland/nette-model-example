@@ -78,7 +78,7 @@ class FundFacade
 		catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex)
 		{
 			if ($ex->getCode() == '23000' &&
-				preg_match("%key 'unique_title'%", $ex->getMessage()))
+				preg_match("%key 'unique_funds_fund_title'%", $ex->getMessage()))
 			{
 				throw new FundTitleNotUniqueException($fund->getTitle(), $ex);
 			}
@@ -110,7 +110,7 @@ class FundFacade
 		catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex)
 		{
 			if ($ex->getCode() == '23000' &&
-				preg_match("%key 'unique_title'%", $ex->getMessage()))
+				preg_match("%key 'unique_funds_fund_title'%", $ex->getMessage()))
 			{
 				throw new FundTitleNotUniqueException($fund->getTitle(), $ex);
 			}
